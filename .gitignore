@@ -1,4 +1,5 @@
 .idea
 php/phpunit.phar
 javascript/npm-debug.log
+*.pyc
 __pycache__
