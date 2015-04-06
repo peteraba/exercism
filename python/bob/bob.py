@@ -1,8 +1,3 @@
-import string
-
-#
-# Skeleton file for the Python "Bob" exercise.
-#
 def hey(what):
 
     what = what.strip()
@@ -10,13 +5,10 @@ def hey(what):
     if not what:
         return 'Fine. Be that way!'
 
-    if what.upper() == what and what.lower() != what:
+    if what.isupper():
         return 'Whoa, chill out!'
 
-    if what.find('?') == len(what) - 1:
+    if what.endswith('?'):
         return 'Sure.'
-
-    if what.upper() == what.lower():
-        return 'Whatever.'
 
     return 'Whatever.'
