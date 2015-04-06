@@ -22,7 +22,7 @@ class Clock
             throw new \InvalidArgumentException('Clock can only add positive numbers.');
         }
 
-        $this->minutes += $minutes % self::DAY_MINUTES;
+        $this->minutes += (int)$minutes % self::DAY_MINUTES;
 
         if ($this->minutes > self::DAY_MINUTES) {
             $this->minutes -= self::DAY_MINUTES;
@@ -37,7 +37,7 @@ class Clock
             throw new \InvalidArgumentException('Clock can only subtract positive numbers.');
         }
 
-        $this->minutes -= $minutes % self::DAY_MINUTES;
+        $this->minutes -= (int)$minutes % self::DAY_MINUTES;
 
         if ($this->minutes < 0) {
             $this->minutes += self::DAY_MINUTES;
