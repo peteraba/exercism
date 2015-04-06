@@ -1,12 +1,14 @@
 <?php
 
+$connect = new Connect();
+
 function resultFor($lines)
 {
+    global $connect;
+
     if (!is_array($lines) || count($lines) === 0) {
         throw new InvalidArgumentException('Board must have at least lines');
     }
-
-    $connect = new Connect();
 
     switch ($connect->checkGame($lines)) {
         case Connect::WHITE:
@@ -24,10 +26,10 @@ class Connect
     const BLACK = 'X';
 
     /** @var array  */
-    private $whiteChecked = [];
-
-    /** @var array */
-    private $blackChecked = [];
+    private $checked = [
+        self::WHITE => [],
+        self::BLACK => []
+    ];
 
     /**
      * @param array $lines
@@ -37,6 +39,11 @@ class Connect
     public function checkGame(array $lines)
     {
         $board = $this->getMatrix($lines);
+
+        $this->checked = [
+            self::WHITE => [],
+            self::BLACK => []
+        ];
 
         if ($this->hasWhiteWon($board)) {
             return self::WHITE;
@@ -69,7 +76,7 @@ class Connect
     private function hasWhiteWon(array $board)
     {
         foreach ($board[0] as $pos => $char) {
-            if ($char === self::WHITE && $this->isWhitePathWinner($board, $pos, 0)) {
+            if ($char === self::WHITE && $this->isPathWinner($board, $pos, 0, self::WHITE)) {
                 return true;
             }
         }
@@ -85,7 +92,7 @@ class Connect
     private function hasBlackWon(array $board)
     {
         foreach ($board as $pos => $line) {
-            if ($line[0] === self::BLACK && $this->isBlackPathWinner($board, 0, $pos)) {
+            if ($line[0] === self::BLACK && $this->isPathWinner($board, 0, $pos, self::BLACK)) {
                 return true;
             }
         }
@@ -100,29 +107,24 @@ class Connect
      *
      * @return bool
      */
-    private function isWhitePathWinner(array $board, $x, $y)
+    private function isPathWinner(array $board, $x, $y, $color)
     {
-        if (!$this->validPosition($board, $x, $y, self::WHITE)) {
+        if (!$this->isValidPosition($board, $x, $y, $color) || $this->isCheckedPosition($x, $y, $color)) {
             return false;
         }
 
-        if (count($board) <= $y + 1) {
+        if ($this->isWinnerPosition($board, $x, $y, $color)) {
             return true;
         }
 
-        if (in_array("$x,$y", $this->whiteChecked, true)) {
-            return false;
-        }
-        $this->whiteChecked[] = "$x,$y";
-
         // Checking way forward
-        for ($dx = -1; $dx <= 1; $dx++) {
-            for ($dy = -1; $dy <= 1; $dy++) {
+        for ($dx = 1; $dx >= -1; $dx--) {
+            for ($dy = 1; $dy >= -1; $dy--) {
                 if ($dx === 0 && $dy === 0) {
                     continue;
                 }
 
-                if ($this->isWhitePathWinner($board, $x + $dx, $y - $dy)) {
+                if ($this->isPathWinner($board, $x + $dx, $y - $dy, $color)) {
                     return true;
                 }
             }
@@ -138,34 +140,33 @@ class Connect
      *
      * @return bool
      */
-    private function isBlackPathWinner(array $board, $x, $y)
+    private function isWinnerPosition(array $board, $x, $y, $color)
     {
-        if (!$this->validPosition($board, $x, $y, self::BLACK)) {
-            return false;
-        }
-
-        if (count($board[0]) <= $x + 1) {
+        if ($color === self::WHITE && count($board) <= $y + 1) {
             return true;
         }
 
-        // Skip if position is already checked
-        if (in_array("$x,$y", $this->blackChecked, true)) {
-            return false;
+        if ($color === self::BLACK && count($board[0]) <= $x + 1) {
+            return true;
         }
-        $this->blackChecked[] = "$x,$y";
 
-        // Checking way forward
-        for ($dx = -1; $dx <= 1; $dx++) {
-            for ($dy = -1; $dy <= 1; $dy++) {
-                if ($dx === 0 && $dy === 0) {
-                    continue;
-                }
+        return false;
+    }
 
-                if ($this->isBlackPathWinner($board, $x + $dx, $y - $dy)) {
-                    return true;
-                }
-            }
+    /**
+     * @param int    $x
+     * @param int    $y
+     * @param string $color
+     *
+     * @return bool
+     */
+    private function isCheckedPosition($x, $y, $color)
+    {
+        if (in_array("$x,$y", $this->checked[$color], true)) {
+            return true;
         }
+
+        $this->checked[$color][] = "$x,$y";
 
         return false;
     }
@@ -178,7 +179,7 @@ class Connect
      *
      * @return bool
      */
-    private function validPosition(array $board, $x, $y, $color)
+    private function isValidPosition(array $board, $x, $y, $color)
     {
         return isset($board[$y][$x]) && $board[$y][$x] === $color;
     }
