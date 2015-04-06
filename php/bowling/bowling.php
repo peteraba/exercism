@@ -26,8 +26,11 @@ class Game
      */
     public function roll($pins)
     {
-        if ($this->frameCount > 10 || $pins < 0 || $pins > 10) {
-            return;
+        if ($this->frameCount > 10) {
+            throw new InvalidArgumentException('Game is already closed.');
+        }
+        if ($pins < 0 || $pins > 10) {
+            throw new InvalidArgumentException('Are you playing Ten-pin bowling?');
         }
 
         $pins = (int)$pins;
