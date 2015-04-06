@@ -1,7 +1,6 @@
 <?php
 
 function calculate($question) {
-    //if (!preg_match_all('/^What is ([\-\d]+)(( (plus|minus|multiplied by|divided by) ([\-\d]+))+)\?$/', $question, $matches)) {
     if (!preg_match('/^What is ([\-\d]+)(.+)\?$/', $question, $matches)) {
         throw new InvalidArgumentException('Irrelevant question.');
     }
