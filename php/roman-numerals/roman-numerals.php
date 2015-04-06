@@ -11,7 +11,7 @@ function translateDigit(&$num, $digit) {
     $count  = floor($num / $digit);
     $num   -= $count * $digit;
     
-    return $translate[$digit][$count];
+    return $translate[$digit][(int)$count];
 }
 
 function toRoman($num) {
