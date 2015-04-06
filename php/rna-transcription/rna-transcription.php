@@ -8,17 +8,9 @@ function toRna($dna) {
         'A' => 'U'
     ];
 
-    if (str_replace($dna, 'CGTA', '') !== '') {
+    if (str_replace(array_keys($translate), '', $dna) !== '') {
         throw new \InvalidArgumentException('Invalid DNA sequence provided.');
     }
 
-    $splitDna = str_split($dna);
-
-    $rna = '';
-
-    foreach ($splitDna as $dnaSeq) {
-        $rna .= $translate[$dnaSeq];
-    }
-
-    return $rna;
+    return strtr($dna, $translate);
 }
