@@ -6,12 +6,5 @@ function toDecimal($trinary) {
         return 0;
     }
 
-    $trinaryDigits = array_reverse(str_split((string)$trinary));
-
-    $decimal = 0;
-    foreach ($trinaryDigits as $digit => $value) {
-        $decimal += pow(3, $digit) * $value;
-    }
-
-    return $decimal;
+    return base_convert($trinary, 3, 10);
 }
