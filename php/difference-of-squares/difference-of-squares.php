@@ -9,11 +9,9 @@ function squareOfSums($num) {
 }
 
 function sumOfSquares($num) {
-    $squares = [];
+    $range = range(1, $num);
 
-    for ($i = 1; $i <= $num; $i++) {
-        $squares[] = $i * $i;
-    }
+    $squares = array_map(function($n){ return $n * $n;}, $range);
 
     return array_sum($squares);
 }
