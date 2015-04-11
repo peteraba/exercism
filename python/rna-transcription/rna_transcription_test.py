@@ -20,6 +20,8 @@ class DNATests(unittest.TestCase):
     def test_transcribes_all_occurences(self):
         self.assertEqual('UGCACCAGAAUU', to_rna('ACGTGGTCTTAA'))
 
+    def test_transcribes_all_occurences(self):
+        self.assertEqual('UGCACCAGAAUU', to_rna('ACGXTGGTCTTAA'))
 
 if __name__ == '__main__':
     unittest.main()
