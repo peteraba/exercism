@@ -1,7 +1,6 @@
 from collections import defaultdict
 
-def default_factory():
-    return ""
+def default_factory(): return ""
 
 def to_rna(dna):
 
