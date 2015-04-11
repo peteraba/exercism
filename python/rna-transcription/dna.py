@@ -4,7 +4,7 @@ def default_factory(): return ""
 
 def to_rna(dna):
 
-    translate = defaultdict(default_factory, {
+    translate = defaultdict(lambda: "", {
         'C': 'G',
         'G': 'C',
         'T': 'A',
