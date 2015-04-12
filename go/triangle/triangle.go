@@ -6,12 +6,12 @@ type Kind int
 
 const (
 	Equ Kind = iota
-	Iso Kind = iota
-	Sca Kind = iota
-	NaT Kind = iota
+	Iso
+	Sca
+	NaT
 )
 
-func KindFromSides(a float64, b float64, c float64) Kind {
+func KindFromSides(a, b, c float64) Kind {
 	// Check Infinite sides
 	if math.IsInf(a, 0) || math.IsInf(b, 0) || math.IsInf(c, 0) {
 		return NaT
