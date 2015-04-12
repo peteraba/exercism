@@ -1,25 +1,17 @@
 package diffsquares
 
-func SquareOfSums(a int) int {
-	sum := 0
+func SquareOfSums(num int) int {
+	// https://www.google.de/search?q=sum+of+sequence
+	sqsum := num * (1 + num) / 2
 
-	for i := 1; i <= a; i++ {
-		sum += i
-	}
-
-	return sum * sum
+	return sqsum * sqsum
 }
 
-func SumOfSquares(a int) int {
-	sum := 0
-
-	for i := 1; i <= a; i++ {
-		sum += i * i
-	}
-
-	return sum
+func SumOfSquares(num int) int {
+	// http://www.trans4mind.com/personal_development/mathematics/series/sumNaturalSquares.htm
+	return num * (num + 1) * (2*num + 1) / 6
 }
 
-func Difference(a int) int {
-	return SquareOfSums(a) - SumOfSquares(a)
+func Difference(num int) int {
+	return SquareOfSums(num) - SumOfSquares(num)
 }
