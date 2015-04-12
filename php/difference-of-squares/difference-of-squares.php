@@ -1,19 +1,15 @@
 <?php
 
 function squareOfSums($num) {
-    $range = range(1, $num);
-
-    $sum = array_sum($range);
+    // https://www.google.de/search?q=sum+of+sequence
+    $sum = $num * (1 + $num) / 2;
 
     return $sum * $sum;
 }
 
 function sumOfSquares($num) {
-    $range = range(1, $num);
-
-    $squares = array_map(function($n){ return $n * $n;}, $range);
-
-    return array_sum($squares);
+    // http://www.trans4mind.com/personal_development/mathematics/series/sumNaturalSquares.htm
+    return $num * ($num + 1) * (2 * $num + 1) / 6;
 }
 
 function difference($num) {
