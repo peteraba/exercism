@@ -46,26 +46,36 @@ class RobotNameGenerator implements NameGenerator
 {
     const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
+    protected static $robotCount = 0;
+    
     /**
      * @return string
      */
     public function generateName()
     {
-        $robotName  = $this->getRandomChar() . $this->getRandomChar();
-        $robotName .= $this->getRandomDigit() . $this->getRandomDigit() . $this->getRandomDigit();
+        $name = $this->getChars() . $this->getNums();
 
-        return $robotName;
+        static::$robotCount++;
+
+        return $name;
     }
 
-    private function getRandomChar()
+    private function getChars()
     {
-        return substr(static::CHARS, mt_rand(0, 25), 1);
+        $charsCount = strlen(self::CHARS);
 
+        $charsNum = floor(static::$robotCount / 1000);
+
+        $firstCharNum = floor($charsNum / $charsCount) % $charsCount;
+
+        $secondCharNum = $charsNum % $charsCount;
+
+        return substr(self::CHARS, $firstCharNum, 1) . substr(self::CHARS, $secondCharNum, 1);
     }
 
-    private function getRandomDigit()
+    private function getNums()
     {
-        return mt_rand(0, 9);
+        return sprintf("%03d", static::$robotCount % 1000);
     }
 }
 
