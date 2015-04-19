@@ -51,10 +51,6 @@ class Clock
      */
     public function __toString()
     {
-        $hours = floor($this->minutes / 60);
-
-        $minutes = $this->minutes % 60;
-
-        return sprintf("%02d:%02d", $hours, $minutes);
+        return date("H:i", mktime(0, $this->minutes));
     }
 }
