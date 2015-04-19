@@ -1,9 +1,11 @@
-def distance(textOne, textTwo):
-    count  = 0
-    lenTwo = len(textTwo)
+"""Python distance exercise solution"""
 
-    for i, c in enumerate(textOne):
-        if lenTwo <= i or textTwo[i] != c:
+def distance(text_one, text_two):
+    """Calculate distance between two strings"""
+    count = 0
+
+    for (char1, char2) in zip(text_one, text_two):
+        if char1 != char2:
             count += 1
 
-    return count + lenTwo - len(textOne)
+    return count
