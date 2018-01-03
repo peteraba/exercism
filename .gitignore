@@ -2,4 +2,6 @@
 php/phpunit.phar
 javascript/npm-debug.log
 *.pyc
+bin
+obj
 __pycache__
