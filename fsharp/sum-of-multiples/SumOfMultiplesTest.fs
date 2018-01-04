@@ -1,32 +1,29 @@
 ﻿module SumOfMultiplesTest
 
-open NUnit.Framework
+open FsUnit.Xunit
+open Xunit
 open SumOfMultiples
 
-[<TestFixture>]
-type SumOfMultiplesTest() =
-    let mutable sumOfMultiples = SumOfMultiples()
-    
-    [<Test>]
-    member tc.Sum_to_1() = 
-        Assert.That(sumOfMultiples.To(0), Is.EqualTo(0))
+[<Fact>]
+let ``Sum to 1`` () =
+    sumOfMultiples [3; 5] 0 |> should equal 0
 
-    [<Test>]
-    [<Ignore>]
-    member tc.Sum_to_3() = 
-        Assert.That(sumOfMultiples.To(3), Is.EqualTo(0))
+[<Fact>]
+let ``Sum to 3`` () =
+    sumOfMultiples [3; 5] 3 |> should equal 0
 
-    [<Test>]
-    [<Ignore>]
-    member tc.Sum_to_10() = 
-        Assert.That(sumOfMultiples.To(10), Is.EqualTo(23))
+[<Fact>]
+let ``Sum to 4`` () =
+    sumOfMultiples [3; 5] 4 |> should equal 3
 
-    [<Test>]
-    [<Ignore>]
-    member tc.Configurable_7_13_17_to_20() = 
-        Assert.That(SumOfMultiples([7; 13; 17]).To(20), Is.EqualTo(51))
+[<Fact>]
+let ``Sum to 10`` () =
+    sumOfMultiples [3; 5] 10 |> should equal 23
 
-    [<Test>]
-    [<Ignore>]
-    member tc.Configurable_43_47_to_10000() = 
-        Assert.That(SumOfMultiples([43; 47]).To(10000), Is.EqualTo(2203160))
+[<Fact>]
+let ``Sum to 20`` () =
+    sumOfMultiples [7; 13; 17] 20 |> should equal 51
+
+[<Fact>]
+let ``Sum to 10000`` () =
+    sumOfMultiples [43; 47] 10000 |> should equal 2203160
