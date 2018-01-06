@@ -1,8 +1,5 @@
 ﻿module Allergies
 
-open System
-
-// TODO: define the Allergen type
 type Allergen =
     | Eggs = 1
     | Peanuts = 2
@@ -14,17 +11,8 @@ type Allergen =
     | Cats = 128
 
 let allergicTo codedAllergies (allergen: Allergen) =
-    int allergen &&& codedAllergies = int allergen
+        codedAllergies &&& int allergen > 0
 
 let list codedAllergies =
-    let mutable res = []
-    let allergens = Enum.GetValues(typeof<Allergen>) |> Seq.cast<Allergen>
-
-    for allergen in allergens do
-        res <-
-            match (allergicTo codedAllergies allergen) with
-            | true -> res @ [ allergen ]
-            | false -> res
-
-    res
-
+    let powersOfTwo = [ for i in [0 .. 7] -> 1 <<< i]
+    [ for p in powersOfTwo do if p &&& codedAllergies > 0 then yield enum<Allergen> p ]
