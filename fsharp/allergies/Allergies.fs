@@ -11,7 +11,7 @@ type Allergen =
     | Cats = 128
 
 let allergicTo codedAllergies (allergen: Allergen) =
-        codedAllergies &&& int allergen > 0
+    codedAllergies &&& int allergen > 0
 
 let list codedAllergies =
     let powersOfTwo = [ for i in [0 .. 7] -> 1 <<< i]
