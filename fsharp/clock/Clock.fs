@@ -1,8 +1,8 @@
 module Clock
 
 type Clock = {
-    mutable hours: int;
-    mutable minutes: int;
+    hours: int;
+    minutes: int;
 }
 
 let create (hours: int) (minutes: int): Clock =
