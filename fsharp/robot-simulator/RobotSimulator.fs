@@ -16,7 +16,7 @@ let turnLeft robot =
             | South -> East
             | West -> South
 
-    createRobot newBearing robot.coordinate
+    { robot with bearing = newBearing }
 
 let turnRight robot =
     let newBearing : Bearing =
@@ -26,31 +26,26 @@ let turnRight robot =
             | South -> West
             | West -> North
 
-    createRobot newBearing robot.coordinate
+    { robot with bearing = newBearing }
 
 let advance robot =
-    let (x, y) = robot.coordinate
+    let x, y = robot.coordinate
     let newCoordinate =
         match robot.bearing with
-            | North -> (x, y + 1)
-            | East -> (x + 1, y)
-            | South ->(x, y - 1)
-            | West -> (x - 1, y)
+            | North -> x, y + 1
+            | East -> x + 1, y
+            | South ->x, y - 1
+            | West -> x - 1, y
 
-    createRobot robot.bearing newCoordinate
+    { robot with coordinate = newCoordinate }
 
-let simulate robot instructions =
-    let mutable newRobot = robot
-    let inst: string = instructions
+let private move robot instruction =
+    match instruction with
+    | 'L' -> turnLeft robot
+    | 'R' -> turnRight robot
+    | 'A' -> advance robot
+    | _ -> robot
 
-    for i = 0 to inst.Length - 1 do
-        newRobot <-
-            match inst.[i..i] with
-                | "L" -> turnLeft newRobot
-                | "R" -> turnRight newRobot
-                | "A" -> advance newRobot
-                | _ -> newRobot
-
-    newRobot
+let simulate robot instructions = instructions |> Seq.fold move robot
 
 
