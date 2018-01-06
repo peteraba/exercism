@@ -21,33 +21,36 @@ let children t =
     | Leaf id -> []
 
 let buildTree records = 
-    let records' = List.sortBy (fun x -> x.RecordId) records
+    let sortedRecords = List.sortBy (fun x -> x.RecordId) records
 
-    let rec inject tree parentId recordId =
+    if List.isEmpty records then failwith "Empty input"
+    if sortedRecords.[0].ParentId <> 0 then failwith "Invalid root record"
+    if [ for r in sortedRecords -> r.RecordId ] <> [ 0 .. sortedRecords.Length - 1 ] then failwith "Invalid records"
+
+    let rec inject (record: Record) tree =
         match tree with
-        | Leaf id when id = parentId -> Branch (id, [ Leaf (recordId) ] )
-        | Branch (id, c) when id = parentId -> Branch (id, c @ [ Leaf (recordId) ])
-        | Branch (id, children) ->
-            let newChildren = [for c in children -> inject c parentId recordId]
-
-            Branch (id, newChildren)
+        | Leaf id when id = record.ParentId -> Branch (id, [ Leaf (record.RecordId) ] )
+        | Branch (id, c) when id = record.ParentId -> Branch (id, c @ [ Leaf (record.RecordId) ])
+        | Branch (id, children) -> Branch (id, [for c in children -> inject record c])
         | _ -> tree
 
-    let rec countChildren tree =
+    let recordListToTree (recordList: Record list) =
+        let mutable tree = Leaf(0)
+
+        for record in recordList.[1 .. ] do
+            tree <- inject record tree
+
+        tree
+
+    let rec countNodes tree =
         match tree with
         | Leaf id -> 1
         | Branch (id, c) ->
-            (List.sumBy countChildren c) + 1
+            (List.sumBy countNodes c) + 1
 
-    match records' with
-    | [] -> failwith "Empty input"
-    | x when [ for r in x -> r.RecordId ] <> [ 0 .. x.Length - 1 ] -> failwith "Invalid records"
-    | { RecordId = 0; ParentId = 0 } :: tail ->
-        let mutable tree = Leaf(0)
+    let tree = recordListToTree sortedRecords
 
-        for record in tail do
-            tree <- inject tree record.ParentId record.RecordId
+    if countNodes tree < records.Length then failwith "Invalid data set: Either cycle found or parent was not found"
 
-        if countChildren tree = records.Length then tree; else failwith "Cycle found"
-    | _ -> failwith "Root node is invalid"
+    tree
 
