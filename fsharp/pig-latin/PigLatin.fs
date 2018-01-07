@@ -1,67 +1,51 @@
 ﻿module PigLatin
 
-let translate (input: string) =
-    let translateWord (word: string): string =
-        let vowels = "aeiou"
-        let vowelDoubles = [ "yt"; "xr" ]
-        let consonantDoubles = [ "ch"; "th"; "qu" ]
-        let consonantTriples = [ "sch"; "thr" ]
 
-        let short2 = if word.Length >= 2 then word.[0 .. 1]; else "";
-        let short3 = if word.Length >= 3 then word.[0 .. 2]; else "";
-        let short2b = if word.Length >= 3 then word.[1 .. 2]; else "";
+let translate (input:string) =
+    let realVowels = ["a"; "e"; "i"; "o"; "u" ]
+    let vowels = ["yt"; "xr"] @ realVowels
+    let extraConsonants = ["sch"; "thr"; "th"; "qu"; "ch"]
 
-        let handleYAfterConsonant word =
-            if word = "rhythm" then "ythmrhay"; else word
+    let toString (list:char list) =
+        new System.String(list |> List.toArray)
 
-        let isVowel ch =
-            String.exists (fun c -> c = ch) vowels
+    let join (list:string seq) =
+        System.String.Join(" ", list)
 
-        match word, short2, short3, short2b with
-            // [consonant]qa*
-            | x, _, z, w
-                when w = "qu" && not (isVowel x.[0])
-                -> word.[3 .. ] + z + "ay"
+    let startsWithAny (haystack: string) (needles: string list): bool =
+        needles |> List.exists (fun s -> haystack.StartsWith(s))
 
-            // sch*, thr*
-            | x, _, z, _
-                when None <> (List.tryFind (fun elem -> elem = z) consonantTriples)
-                -> word.[3 .. ] + z + "ay"
+    let startsWith (haystack: string) (needles: string list): string option =
+        needles |> List.tryFind (fun s -> haystack.StartsWith(s))
 
-            // .y
-            | _, y, "", _
-                when y.[1] = 'y'
-                -> "y" + y.[0 .. 0] + "ay"
+    let rec consonantsBeforeY (haystack: string) (acc: int): int =
+        match haystack.[0 .. 0] with
+        | "y" -> acc
+        | x
+            when not (List.exists (fun s -> s = x) realVowels)
+            -> consonantsBeforeY haystack.[1 ..] (acc + 1)
+        | _ -> 0
 
-            // ch*, th*, qu*
-            | x, y, _, _
-                when None <> (List.tryFind (fun elem -> elem = y) consonantDoubles)
-                -> word.[2 .. ] + y + "ay"
+    let translateWord (word:string) =
+        match startsWithAny word vowels with
+        | true -> word + "ay"
+        | false ->
+            match startsWith word extraConsonants with
+            | Some x -> word.Substring(x.Length) + x + "ay"
+            | None ->
+                let charList = word.ToCharArray() |> Array.toList
 
-            // yt*, xr*
-            | x, y, _, _
-                when None <> (List.tryFind (fun elem -> elem = y) vowelDoubles)
-                -> y + word.[2 .. ] + "ay"
+                match charList with
+                | x :: 'q' :: 'u' :: rest ->
+                    (rest @ [x; 'q'; 'u'] |> toString) + "ay"
+                | x :: xs ->
+                    match consonantsBeforeY word 0 with
+                    | len when len > 0 -> word.[len .. ] + word.[0 .. len - 1] + "ay"
+                    | _ -> (xs @ [x] |> toString) + "ay"
+                | [] ->
+                    failwith "Undefined behavior"
 
-            // *
-            | x, _, _, _
-                when x <> ""
-                ->
-                    let consonantAfterY = handleYAfterConsonant x
-                    let vowelFirst = isVowel x.[0]
+    input.Split([|' '|])
+        |> Array.map translateWord
+        |> join
 
-                    match consonantAfterY, vowelFirst with
-                    // [consonant]+y*
-                    | x2, _ when x <> x2 -> x2
-                    // [vowel]*
-                    | _, true -> x + "ay"
-                    // [consonant]*
-                    | _, false -> x.[1 .. ] + x.[0 .. 0] + "ay"
-
-            // -
-            | _, _, _, _
-                -> failwith "Undefined behaviour"
-
-    List.map translateWord (input.Split [|' '|] |> List.ofArray)
-        |> List.fold (fun r s -> r + s + " ") ""
-        |> (fun x -> x.Trim() )
