@@ -1,8 +1,8 @@
 ﻿module Hamming
 
 let distance (strand1: string) (strand2: string): int option =
-    match strand1.Length, strand2.Length with
-    | x, y when x = y ->
-        let seq1, seq2 = (List.ofSeq strand1), (List.ofSeq strand2)
-        Some(List.fold2 (fun acc a b -> if a = b then acc; else acc + 1) 0 seq1 seq2)
-    | _, _ -> None
+    if strand1.Length = strand2.Length
+    then
+        Some(Seq.zip strand1 strand2 |> Seq.sumBy (fun (a, b) -> if a = b then 0; else 1))
+        
+    else None
