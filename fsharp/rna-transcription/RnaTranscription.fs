@@ -8,10 +8,10 @@ let toRna (dna: string): string option =
         | 'T' -> 'A'
         | 'A' -> 'U'
         | _ -> failwith "Invalid RNA"
-    
+
     try
         let rna = Seq.map translateChar dna |> System.String.Concat
-       
+
         Some(rna)
     with
         | Failure(msg) -> None
