@@ -33,7 +33,7 @@ let recite (start: int) (stop: int) =
 
     let addAnd (wordList: string list): string list =
         match wordList with
-        | [elem] -> wordList
+        | [_] -> wordList
         | head :: tail -> ("and " + head) :: tail
         | x -> x
 
