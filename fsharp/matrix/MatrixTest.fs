@@ -28,7 +28,7 @@ type MatrixTest() =
         theoryData.Add("1 4 9\n16 25 36\n5 6 7", [| 5; 6; 7 |])
         theoryData
 
-    [<Theory(Skip = "Remove to run test")>]
+    [<Theory>]
     [<MemberData("ExtractLastRowData")>]
     member this.``Extract last row`` (input: string) expected =
         let matrix = fromString input
@@ -41,7 +41,7 @@ type MatrixTest() =
         theoryData.Add("1 2 3\n4 5 6\n7 8 9\n8 7 6", [| 1; 4; 7; 8 |])
         theoryData
 
-    [<Theory(Skip = "Remove to run test")>]
+    [<Theory>]
     [<MemberData("ExtractFirstColumnData")>]
     member this.``Extract first column`` (input: string) expected =
         let matrix = fromString input
@@ -55,13 +55,13 @@ type MatrixTest() =
         theoryData.Add("11 12 13\n14 15 16\n17 18 19\n18 17 16", [| 13; 16; 19; 16 |])
         theoryData
 
-    [<Theory(Skip = "Remove to run test")>]
+    [<Theory>]
     [<MemberData("ExtractLastColumnData")>]
     member this.``Extract last column`` (input: string) expected =
         let matrix = fromString input
         cols matrix |> Array.last |> should equal expected
 
-    [<Theory(Skip = "Remove to run test")>]
+    [<Theory>]
     [<InlineData("28", 1)>]
     [<InlineData("13\n16", 2)>]
     [<InlineData("289 21903\n23 218\n23 21", 3)>]
@@ -70,7 +70,7 @@ type MatrixTest() =
         let matrix = fromString input
         rows matrix |> Array.length |> should equal expected
 
-    [<Theory(Skip = "Remove to run test")>]
+    [<Theory>]
     [<InlineData("28", 1)>]
     [<InlineData("13 2\n16 3\n19 4", 2)>]
     [<InlineData("289 21903\n23 218\n23 21", 2)>]
