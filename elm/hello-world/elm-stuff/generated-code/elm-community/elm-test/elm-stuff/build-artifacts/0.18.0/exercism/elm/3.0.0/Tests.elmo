@@ -1,0 +1,45 @@
+var _exercism$elm$Tests$tests = A2(
+	_elm_community$elm_test$Test$describe,
+	'Hello, World!',
+	{
+		ctor: '::',
+		_0: A2(
+			_elm_community$elm_test$Test$test,
+			'Hello with no name',
+			function (_p0) {
+				var _p1 = _p0;
+				return A2(
+					_elm_community$elm_test$Expect$equal,
+					'Hello, World!',
+					_exercism$elm$HelloWorld$helloWorld(_elm_lang$core$Maybe$Nothing));
+			}),
+		_1: {
+			ctor: '::',
+			_0: A2(
+				_elm_community$elm_test$Test$test,
+				'Hello to a sample name',
+				function (_p2) {
+					var _p3 = _p2;
+					return A2(
+						_elm_community$elm_test$Expect$equal,
+						'Hello, Alice!',
+						_exercism$elm$HelloWorld$helloWorld(
+							_elm_lang$core$Maybe$Just('Alice')));
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_community$elm_test$Test$test,
+					'Hello to another sample name',
+					function (_p4) {
+						var _p5 = _p4;
+						return A2(
+							_elm_community$elm_test$Expect$equal,
+							'Hello, Bob!',
+							_exercism$elm$HelloWorld$helloWorld(
+								_elm_lang$core$Maybe$Just('Bob')));
+					}),
+				_1: {ctor: '[]'}
+			}
+		}
+	});
