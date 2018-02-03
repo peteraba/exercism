@@ -5,3 +5,5 @@ javascript/npm-debug.log
 bin
 obj
 __pycache__
+
+node_modules
