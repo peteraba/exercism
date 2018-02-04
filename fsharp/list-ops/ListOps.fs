@@ -1,5 +1,4 @@
 ﻿module ListOps
-open System.Globalization
 
 let rec foldl folder state list =
     match list with
